@@ -1,0 +1,45 @@
+services:
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: namenode
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    environment:
+      - CLUSTER_NAME=youtube-cluster
+      - CORE_CONF_fs_defaultFS=hdfs://10.77.120.200:9000
+      - HDFS_CONF_dfs_replication=2
+      - HDFS_CONF_dfs_namenode_rpc___bind___host=0.0.0.0
+      - HDFS_CONF_dfs_namenode_http___bind___host=0.0.0.0
+      - HDFS_CONF_dfs_namenode_datanode_registration_ip___hostname___check=false
+      - HDFS_CONF_dfs_permissions_enabled=false
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./data:/data
+
+  spark-master:
+    image: apache/spark:3.5.9-python3
+    container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master -h 0.0.0.0
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+      - "7078:7078"
+      - "7079:7079"
+    environment:
+      - SPARK_PUBLIC_DNS=10.77.120.200
+      - SPARK_DAEMON_MEMORY=512m
+    volumes:
+      - ./scripts:/scripts
+
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  hadoop_namenode:
+  mongo_data:

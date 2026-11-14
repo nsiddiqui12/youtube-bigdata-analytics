@@ -1,0 +1,27 @@
+# Dataset (download separately, see README)
+data/*.csv
+
+# Dependencies & build output
+node_modules/
+dist/
+dist-ssr/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
